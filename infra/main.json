@@ -163,8 +163,12 @@
                       "value": "[parameters('openai_instance_name')]"
                     },
                     {
-                      "name": "AZURE_OPENAI_API_DEPLOYMENT_NAME",
-                      "value": "[parameters('openai_deployment_name')]"
+                      "name": "AZURE_OPENAI_API_GPT4_DEPLOYMENT_NAME",
+                      "value": "[parameters('openai_4_deployment_name')]"
+                    },
+                    {
+                      "name": "AZURE_OPENAI_API_GPT35_DEPLOYMENT_NAME",
+                      "value": "[parameters('openai_35_deployment_name')]"
                     },
                     {
                       "name": "AZURE_OPENAI_API_VERSION",

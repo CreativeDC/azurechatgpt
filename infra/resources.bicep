@@ -3,7 +3,8 @@ param resourceToken string
 
 param openai_api_key string
 param openai_instance_name string
-param openai_deployment_name string
+param openai_4_deployment_name string
+param openai_35_deployment_name string
 param openai_api_version string
 
 var location = resourceGroup().location
@@ -51,9 +52,13 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
           value: openai_instance_name
         }
         {
-          name: 'AZURE_OPENAI_API_DEPLOYMENT_NAME'
-          value: openai_deployment_name
-        }
+          'name': 'AZURE_OPENAI_API_GPT4_DEPLOYMENT_NAME'
+          'value': openai_4_deployment_name
+        },
+        {
+          'name': 'AZURE_OPENAI_API_GPT35_DEPLOYMENT_NAME'
+          'value': openai_35_deployment_name
+        },
         {
           name: 'AZURE_OPENAI_API_VERSION'
           value: openai_api_version

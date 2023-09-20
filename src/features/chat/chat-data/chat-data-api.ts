@@ -13,7 +13,7 @@ import {
 import { AzureCogSearch } from "../../langchain/vector-stores/azure-cog-search/azure-cog-vector-store";
 import { insertPromptAndResponse } from "../chat-services/chat-service";
 import { initAndGuardChatSession } from "../chat-services/chat-thread-service";
-import { FaqDocumentIndex, PromptGPTProps } from "../chat-services/models";
+import { FaqDocumentIndex, PromptGPTProps, GPT_3_5, GPT_4 } from "../chat-services/models";
 import { transformConversationStyleToTemperature } from "../chat-services/utils";
 
 export const ChatData = async (props: PromptGPTProps) => {
@@ -22,6 +22,8 @@ export const ChatData = async (props: PromptGPTProps) => {
   );
 
   const chatModel = new ChatOpenAI({
+    modelName: chatThread.model,
+    azureOpenAIApiDeploymentName: (chatThread.model == GPT_3_5) ? process.env.AZURE_OPENAI_API_GPT35_DEPLOYMENT_NAME : (chatThread.model == GPT_4) ? process.env.AZURE_OPENAI_API_GPT4_DEPLOYMENT_NAME : process.env.AZURE_OPENAI_API_GPT35_DEPLOYMENT_NAME,
     temperature: transformConversationStyleToTemperature(
       chatThread.conversationStyle
     ),
