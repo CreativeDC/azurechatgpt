@@ -1,3 +1,5 @@
+"use client";
+
 import Typography from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,6 +11,9 @@ import { ChatModelSelector } from "./chat-model-selector";
 import { ChatStyleSelector } from "./chat-style-selector";
 import { ChatTypeSelector } from "./chat-type-selector";
 import { AI_NAME } from "@/features/theme/customise";
+import Image from "next/image";
+import {useTheme} from "next-themes";
+
 interface Prop {
   isUploadingFile: boolean;
   llmModel: LLMModel;
@@ -21,7 +26,7 @@ interface Prop {
 }
 
 export const EmptyState: FC<Prop> = (props) => {
-
+  const { theme, setTheme } = useTheme();
   const [showFileUpload, setShowFileUpload] = useState<ChatType>("simple");
   const [isFileNull, setIsFileNull] = useState(true);
 
@@ -40,19 +45,24 @@ export const EmptyState: FC<Prop> = (props) => {
 
   return (
     <div className="grid grid-cols-5 w-full items-center container mx-auto max-w-3xl justify-center h-full gap-9">
-      <div className="col-span-2 gap-5 flex flex-col flex-1">
-        <Typography variant="h4" className="text-primary">
-          Hello!
-        </Typography>
-        <p className="">
-          Welcome to {AI_NAME} - the friendly chatbot from Creative IT! Start by just typing your message in the box below. You can also
-          personalize the chat by making changes to the settings on the right.
-        </p>
-        <p className="">
-          {AI_NAME} users are requried to read and accept Creative's AI Guidance. <a className="text-link hover:text-link-hover" href="https://creativedc.sharepoint.com/:w:/r/sites/OPO/_layouts/15/Doc.aspx?sourcedoc=%7B8DDE5637-5740-4A65-B55C-2D7E47CC438F%7D&file=Updated%20Draft%20Guidance_Generative%20AI%20Use%20at%20Creative.docx&action=default&mobileredirect=true" target="_blank">Click here</a> to access the guidance.
-        </p>
-      </div>
-      <Card className="col-span-3 flex flex-col gap-5 p-5 ">
+       <div className="col-span-5 flex flex-col items-center gap-5">
+        <div className="flex justify-center">
+          <Image src={(theme == "dark") ? "/CreativeGPTlogo-light.png" : "/CreativeGPTlogo-dark.png"} width={200} height={200} alt="Logo" />
+        </div>
+        <div className="col-span-5 flex flex-col gap-5 p-5 ">
+          <Typography variant="h4" className="text-primary">
+            Welcome!
+          </Typography>
+          <p className="">
+            Welcome to {AI_NAME} - the friendly chatbot from Creative IT! Start by  typing your message in the box below. You can also
+            personalize the chat by making changes to the settings shown below.
+          </p>
+          <p className="">
+            {AI_NAME} users are requried to read and accept Creative's AI Guidance. <a className="text-link hover:text-link-hover" href="https://creativedc.sharepoint.com/:w:/r/sites/OPO/_layouts/15/Doc.aspx?sourcedoc=%7B8DDE5637-5740-4A65-B55C-2D7E47CC438F%7D&file=Updated%20Draft%20Guidance_Generative%20AI%20Use%20at%20Creative.docx&action=default&mobileredirect=true" target="_blank">Click here</a> to access the guidance.
+          </p>
+        </div>
+      
+      <Card className="col-span-5 flex flex-col gap-5 p-5 w-full">
         <Typography variant="h4" className="text-primary">
           Personalize
         </Typography>
@@ -113,6 +123,7 @@ export const EmptyState: FC<Prop> = (props) => {
           </div>
         )}
       </Card>
+      </div>
     </div>
   );
 };
