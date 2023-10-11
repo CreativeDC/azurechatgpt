@@ -25,7 +25,7 @@ const UserProfile = () => {
           {session?.user?.image ? (
               <Avatar className="">
                 <AvatarImage
-                  src={session?.user?.image}
+                  avatarImageSource={session?.user?.image}
                   alt={session?.user?.name!}
                 />
               </Avatar>

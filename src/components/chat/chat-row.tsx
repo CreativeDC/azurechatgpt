@@ -39,7 +39,7 @@ const ChatRow: FC<ChatRowProps> = (props) => {
         <div className="flex items-center justify-between">
           <div className="flex gap-4 items-center">
             <Avatar>
-              <AvatarImage src={props.profilePicture} />
+              <AvatarImage avatarImageSource={props.profilePicture} />
             </Avatar>
             <Typography variant="h5" className="capitalize text-primary">
               {props.name}
