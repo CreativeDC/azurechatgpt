@@ -147,17 +147,22 @@ export const ChatUI: FC<Prop> = (props) => {
       {messages.length !== 0 ? (
         ChatWindow
       ) : (
-        <EmptyState
-          isUploadingFile={isUploadingFile}
-          onFileChange={onFileChange}
-          onLLMModelChange={onChatModelChange}
-          onConversationStyleChange={onConversationStyleChange}
-          onChatTypeChange={onChatTypeChange}
-          chatType={chatBody.chatType}
-          llmModel={chatBody.model}
-          conversationStyle={chatBody.conversationStyle}
-        />
+        <div className=" h-full rounded-md overflow-y-auto">
+          <div className=" pb-[80px] ">
+            <EmptyState
+              isUploadingFile={isUploadingFile}
+              onFileChange={onFileChange}
+              onLLMModelChange={onChatModelChange}
+              onConversationStyleChange={onConversationStyleChange}
+              onChatTypeChange={onChatTypeChange}
+              chatType={chatBody.chatType}
+              llmModel={chatBody.model}
+              conversationStyle={chatBody.conversationStyle}
+            />
+          </div>
+        </div>
       )}
+ 
 
       <ChatInput
         isLoading={isLoading}

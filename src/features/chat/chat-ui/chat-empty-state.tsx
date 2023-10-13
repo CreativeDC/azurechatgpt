@@ -44,6 +44,7 @@ export const EmptyState: FC<Prop> = (props) => {
   };
 
   return (
+
     <div className="grid grid-cols-5 w-full items-center container mx-auto max-w-3xl justify-center h-full gap-9">
        <div className="col-span-5 flex flex-col items-center gap-5">
         <div className="flex justify-center">
