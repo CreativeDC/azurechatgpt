@@ -13,12 +13,12 @@ import { useSession } from "next-auth/react";
 import { FC, FormEvent, useRef, useState } from "react";
 import { UploadDocument } from "../chat-services/chat-document-service";
 import {
-  ChatMessageModel,
-  ChatThreadModel,
-  ChatType,
-  ConversationStyle,
-  LLMModel,
-  PromptGPTBody,
+	ChatMessageModel,
+	ChatThreadModel,
+	ChatType,
+	ConversationStyle,
+	LLMModel,
+	PromptGPTBody,
 } from "../chat-services/models";
 import { transformCosmosToAIModel } from "../chat-services/utils";
 import { EmptyState } from "./chat-empty-state";
@@ -27,149 +27,149 @@ import {useTheme} from "next-themes";
 
 
 interface Prop {
-  chats: Array<ChatMessageModel>;
-  chatThread: ChatThreadModel;
+	chats: Array<ChatMessageModel>;
+	chatThread: ChatThreadModel;
 }
 
 export const ChatUI: FC<Prop> = (props) => {
-  const { theme, setTheme } = useTheme();
-  const { id, chatType, conversationStyle, model } = props.chatThread;
+	const { theme, setTheme } = useTheme();
+	const { id, chatType, conversationStyle, model } = props.chatThread;
 
-  const { data: session } = useSession();
+	const { data: session } = useSession();
 
-  const [isUploadingFile, setIsUploadingFile] = useState(false);
+	const [isUploadingFile, setIsUploadingFile] = useState(false);
 
-  const [chatBody, setBody] = useState<PromptGPTBody>({
-    id: id,
-    model: model,
-    chatType: chatType,
-    conversationStyle: conversationStyle,
-  });
+	const [chatBody, setBody] = useState<PromptGPTBody>({
+		id: id,
+		model: model,
+		chatType: chatType,
+		conversationStyle: conversationStyle,
+	});
 
-  const { toast } = useToast();
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    reload,
-    isLoading,
-  } = useChat({
-    onError,
-    id,
-    body: chatBody,
-    initialMessages: transformCosmosToAIModel(props.chats),
-  });
+	const { toast } = useToast();
+	const {
+		messages,
+		input,
+		handleInputChange,
+		handleSubmit,
+		reload,
+		isLoading,
+	} = useChat({
+		onError,
+		id,
+		body: chatBody,
+		initialMessages: transformCosmosToAIModel(props.chats),
+	});
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-  useChatScrollAnchor(messages, scrollRef);
+	const scrollRef = useRef<HTMLDivElement>(null);
+	useChatScrollAnchor(messages, scrollRef);
 
-  function onError(error: Error) {
-    toast({
-      variant: "destructive",
-      description: error.message,
-      action: (
-        <ToastAction
-          altText="Try again"
-          onClick={() => {
-            reload();
-          }}
-        >
-          Try again
-        </ToastAction>
-      ),
-    });
-  }
+	function onError(error: Error) {
+		toast({
+			variant: "destructive",
+			description: error.message,
+			action: (
+				<ToastAction
+					altText="Try again"
+					onClick={() => {
+						reload();
+					}}
+				>
+					Try again
+				</ToastAction>
+			),
+		});
+	}
 
-  const onChatModelChange = (value: LLMModel) => {
-    setBody((e) => ({ ...e, model: value }));
-  };
+	const onChatModelChange = (value: LLMModel) => {
+		setBody((e) => ({ ...e, model: value }));
+	};
 
-  const onChatTypeChange = (value: ChatType) => {
-    setBody((e) => ({ ...e, chatType: value }));
-  };
+	const onChatTypeChange = (value: ChatType) => {
+		setBody((e) => ({ ...e, chatType: value }));
+	};
 
-  const onConversationStyleChange = (value: ConversationStyle) => {
-    setBody((e) => ({ ...e, conversationStyle: value }));
-  };
+	const onConversationStyleChange = (value: ConversationStyle) => {
+		setBody((e) => ({ ...e, conversationStyle: value }));
+	};
 
-  const onHandleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    handleSubmit(e);
-  };
+	const onHandleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		handleSubmit(e);
+	};
 
-  const onFileChange = async (formData: FormData) => {
-    try {
-      setIsUploadingFile(true);
-      formData.append("id", id);
-      const fileName = await UploadDocument(formData);
-      toast({
-        title: "File upload",
-        description: `${fileName} uploaded successfully.`,
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: "" + error,
-      });
-    } finally {
-      setIsUploadingFile(false);
-    }
-  };
+	const onFileChange = async (formData: FormData) => {
+		try {
+			setIsUploadingFile(true);
+			formData.append("id", id);
+			const fileName = await UploadDocument(formData);
+			toast({
+				title: "File upload",
+				description: `${fileName} uploaded successfully.`,
+			});
+		} catch (error) {
+			toast({
+				variant: "destructive",
+				description: "" + ((error as Error).cause ?? error),
+			});
+		} finally {
+			setIsUploadingFile(false);
+		}
+	};
 
-  const ChatWindow = (
-    <div className=" h-full rounded-md overflow-y-auto" ref={scrollRef}>
-      <div className="flex justify-center p-4">
-        <ChatHeader
-          chatType={chatBody.chatType}
-          conversationStyle={chatBody.conversationStyle}
-          llmModel={chatBody.model}
-        />
-      </div>
-      <div className=" pb-[80px] ">
-        {messages.map((message, index) => (
-          <ChatRow
-            name={message.role === "user" ? session?.user?.name! : AI_NAME}
-            profilePicture={
-              message.role === "user" ? session?.user?.image! : (theme == "dark") ? "/CreativeGPTlogo-light.png" : "/CreativeGPTlogo-dark.png"
-            }
-            message={message.content}
-            type={message.role}
-            key={index}
-          />
-        ))}
-        {isLoading && <ChatLoading />}
-      </div>
-    </div>
-  );
+	const ChatWindow = (
+		<div className=" h-full rounded-md overflow-y-auto" ref={scrollRef}>
+			<div className="flex justify-center p-4">
+				<ChatHeader
+					chatType={chatBody.chatType}
+					conversationStyle={chatBody.conversationStyle}
+					llmModel={chatBody.model}
+				/>
+			</div>
+			<div className=" pb-[80px] ">
+				{messages.map((message, index) => (
+					<ChatRow
+						name={message.role === "user" ? session?.user?.name! : AI_NAME}
+						profilePicture={
+							message.role === "user" ? session?.user?.image! : (theme == "dark") ? "/CreativeGPTlogo-light.png" : "/CreativeGPTlogo-dark.png"
+						}
+						message={message.content}
+						type={message.role}
+						key={index}
+					/>
+				))}
+				{isLoading && <ChatLoading />}
+			</div>
+		</div>
+	);
 
-  return (
-    <Card className="h-full relative overflow-hidden">
-      {messages.length !== 0 ? (
-        ChatWindow
-      ) : (
-        <div className=" h-full rounded-md overflow-y-auto">
-          <div className=" pb-[80px] ">
-            <EmptyState
-              isUploadingFile={isUploadingFile}
-              onFileChange={onFileChange}
-              onLLMModelChange={onChatModelChange}
-              onConversationStyleChange={onConversationStyleChange}
-              onChatTypeChange={onChatTypeChange}
-              chatType={chatBody.chatType}
-              llmModel={chatBody.model}
-              conversationStyle={chatBody.conversationStyle}
-            />
-          </div>
-        </div>
-      )}
+	return (
+		<Card className="h-full relative overflow-hidden">
+			{messages.length !== 0 ? (
+				ChatWindow
+			) : (
+				<div className=" h-full rounded-md overflow-y-auto">
+					<div className=" pb-[80px] ">
+						<EmptyState
+							isUploadingFile={isUploadingFile}
+							onFileChange={onFileChange}
+							onLLMModelChange={onChatModelChange}
+							onConversationStyleChange={onConversationStyleChange}
+							onChatTypeChange={onChatTypeChange}
+							chatType={chatBody.chatType}
+							llmModel={chatBody.model}
+							conversationStyle={chatBody.conversationStyle}
+						/>
+					</div>
+				</div>
+			)}
  
 
-      <ChatInput
-        isLoading={isLoading}
-        value={input}
-        handleInputChange={handleInputChange}
-        handleSubmit={onHandleSubmit}
-      />
-    </Card>
-  );
+			<ChatInput
+				isLoading={isLoading}
+				value={input}
+				handleInputChange={handleInputChange}
+				handleSubmit={onHandleSubmit}
+			/>
+		</Card>
+	);
 };

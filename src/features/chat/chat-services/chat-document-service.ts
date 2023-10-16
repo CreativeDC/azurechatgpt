@@ -17,7 +17,9 @@ import {
   FaqDocumentIndex,
 } from "./models";
 
-const MAX_DOCUMENT_SIZE = 20000000;
+const MAX_DOCUMENT_SIZE = 100000000;
+
+const ALLOWED_FILE_TYPE_SET = ["application/pdf", "image/jpeg", "image/png"];
 
 export const UploadDocument = async (formData: FormData) => {
   const { docs, file, chatThreadId } = await LoadFile(formData);
@@ -28,40 +30,60 @@ export const UploadDocument = async (formData: FormData) => {
 };
 
 const LoadFile = async (formData: FormData) => {
-  const file: File | null = formData.get("file") as unknown as File;
-  const chatThreadId: string = formData.get("id") as unknown as string;
+	const file: File | null = formData.get("file") as unknown as File;
+	const chatThreadId: string = formData.get("id") as unknown as string;
+	const docs: Document[] = [];
+	let errorMessage = null;
 
-  if (file && file.size < MAX_DOCUMENT_SIZE) {
-    const client = initDocumentIntelligence();
+	try
+	{
+		if (file && file.size < MAX_DOCUMENT_SIZE) {
+			const client = initDocumentIntelligence();
 
-    const blob = new Blob([file], { type: file.type });
+			const blob = new Blob([file], { type: file.type });
 
-    const poller = await client.beginAnalyzeDocument(
-      "prebuilt-document",
-      await blob.arrayBuffer()
-    );
+			const poller = await client.beginAnalyzeDocument(
+				"prebuilt-document",
+				await blob.arrayBuffer()
+			);
 
-    const { paragraphs } = await poller.pollUntilDone();
+			const { paragraphs } = await poller.pollUntilDone();
 
-    const docs: Document[] = [];
+			if (paragraphs) {
+				for (const paragraph of paragraphs) {
+				const doc: Document = {
+					pageContent: paragraph.content,
+					metadata: {
+					file: file.name,
+					},
+				};
+				docs.push(doc);
+				}
+			} else {
+				throw new Error("No content found in document.");
+			}
+		}
 
-    if (paragraphs) {
-      for (const paragraph of paragraphs) {
-        const doc: Document = {
-          pageContent: paragraph.content,
-          metadata: {
-            file: file.name,
-          },
-        };
-        docs.push(doc);
-      }
-    } else {
-      throw new Error("No content found in document.");
-    }
+		throw new Error("Please upload a PDF, JPG, or PNG file less than 100MB.");
+	}
+	catch (error)
+	{
+		if (file && file.size > MAX_DOCUMENT_SIZE) {
+			errorMessage = "File size is too large. Please upload a file less than 100MB.";
+		} else if (file && !ALLOWED_FILE_TYPE_SET.includes(file.type)) {
+			errorMessage = "Invalid file type. Only PDF, JPG, and PNG files are supported.";
+		} else if (!file) {
+			errorMessage = "File appears to be empty.";
+		} else {
+			errorMessage = "Unknown error. Please contact ApplicationDevelopment@CreativeDC.com for assistance.";
+		}
+	}
 
-    return { docs, file, chatThreadId };
-  }
-  throw new Error("Invalid file format or size. Only PDF files are supported.");
+	if (errorMessage) {
+		throw new Error(errorMessage, { cause: errorMessage });
+	}
+
+	return { docs, file, chatThreadId };
 };
 
 const SplitDocuments = async (docs: Array<Document>) => {
