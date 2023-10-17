@@ -67,7 +67,7 @@ const LoadFile = async (formData: FormData) => {
 					const doc: Document = {
 						pageContent: paragraph.content,
 						metadata: {
-						file: file.name,
+							file: file.name,
 						},
 					};
 					
