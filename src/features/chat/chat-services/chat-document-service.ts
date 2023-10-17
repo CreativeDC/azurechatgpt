@@ -34,6 +34,7 @@ const LoadFile = async (formData: FormData) => {
 	const chatThreadId: string = formData.get("id") as unknown as string;
 	const docs: Document[] = [];
 	let errorMessage = null;
+	let paragraphs: any[] | undefined;
 
 	try
 	{
@@ -47,7 +48,7 @@ const LoadFile = async (formData: FormData) => {
 				await blob.arrayBuffer()
 			);
 
-			const { paragraphs } = await poller.pollUntilDone();
+			paragraphs = (await poller.pollUntilDone()).paragraphs;
 
 			if (paragraphs) {
 				for (const paragraph of paragraphs) {
@@ -72,8 +73,10 @@ const LoadFile = async (formData: FormData) => {
 			errorMessage = "File size is too large. Please upload a file less than 100MB.";
 		} else if (file && !ALLOWED_FILE_TYPE_SET.includes(file.type)) {
 			errorMessage = "Invalid file type. Only PDF, JPG, and PNG files are supported.";
+		} else if (!paragraphs || paragraphs.length === 0) {
+			errorMessage = "Unable to find any text for processing in this file.";
 		} else if (!file) {
-			errorMessage = "File appears to be empty.";
+			errorMessage = "Unable to load file. Please try again or contact ApplicationDevelopment@CreativeDC.com for assistance.";
 		} else {
 			errorMessage = "Unknown error. Please contact ApplicationDevelopment@CreativeDC.com for assistance.";
 		}
