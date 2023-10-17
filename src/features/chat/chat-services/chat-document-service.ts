@@ -36,9 +36,17 @@ const LoadFile = async (formData: FormData) => {
 	let errorMessage = null;
 	let paragraphs: any[] | undefined;
 
+	if (!file) {
+		errorMessage = "Unable to load file. Please try again or contact ApplicationDevelopment@CreativeDC.com for assistance.";
+	} else if (file.size > MAX_DOCUMENT_SIZE) {
+		errorMessage = "File size is too large. Please upload a file less than 100MB.";
+	} else if (!ALLOWED_FILE_TYPE_SET.includes(file.type)) {
+		errorMessage = "Invalid file type. Only PDF, JPG, and PNG files are supported.";
+	}
+
 	try
 	{
-		if (file && file.size < MAX_DOCUMENT_SIZE) {
+		if (!errorMessage) {
 			const client = initDocumentIntelligence();
 
 			const blob = new Blob([file], { type: file.type });
@@ -50,36 +58,27 @@ const LoadFile = async (formData: FormData) => {
 
 			paragraphs = (await poller.pollUntilDone()).paragraphs;
 
-			if (paragraphs) {
-				for (const paragraph of paragraphs) {
-				const doc: Document = {
-					pageContent: paragraph.content,
-					metadata: {
-					file: file.name,
-					},
-				};
-				docs.push(doc);
-				}
-			} else {
-				throw new Error("No content found in document.");
+			if (!paragraphs || paragraphs.length === 0) {
+				errorMessage = "Unable to find any text for processing in this file.";
 			}
-		}
 
-		throw new Error("Please upload a PDF, JPG, or PNG file less than 100MB.");
+			if (paragraphs && !errorMessage) {
+				for (const paragraph of paragraphs) {
+					const doc: Document = {
+						pageContent: paragraph.content,
+						metadata: {
+						file: file.name,
+						},
+					};
+					
+					docs.push(doc);
+				}
+			} 
+		}
 	}
 	catch (error)
 	{
-		if (file && file.size > MAX_DOCUMENT_SIZE) {
-			errorMessage = "File size is too large. Please upload a file less than 100MB.";
-		} else if (file && !ALLOWED_FILE_TYPE_SET.includes(file.type)) {
-			errorMessage = "Invalid file type. Only PDF, JPG, and PNG files are supported.";
-		} else if (!paragraphs || paragraphs.length === 0) {
-			errorMessage = "Unable to find any text for processing in this file.";
-		} else if (!file) {
-			errorMessage = "Unable to load file. Please try again or contact ApplicationDevelopment@CreativeDC.com for assistance.";
-		} else {
-			errorMessage = "Unknown error. Please contact ApplicationDevelopment@CreativeDC.com for assistance.";
-		}
+		errorMessage = "Unknown error. Please contact ApplicationDevelopment@CreativeDC.com for assistance.";
 	}
 
 	if (errorMessage) {
