@@ -49,11 +49,16 @@ const ALLOWED_MIME_TYPE_SET = FORM_RECOGNIZER_EXTRACTION_MIME_TYPE_SET
 	.concat(MSGREADER_EXTRACTION_MIME_TYPE_SET);
 
 export const UploadDocument = async (formData: FormData) => {
-  const { docs, file, chatThreadId } = await LoadFile(formData);
-  const splitDocuments = await SplitDocuments(docs);
-  const docPageContents = splitDocuments.map((item) => item.pageContent);
-  await IndexDocuments(file, docPageContents, chatThreadId);
-  return file.name;
+	const { docs, file, chatThreadId, errorMessage } = await LoadFile(formData);
+
+	if (!errorMessage) {
+		const splitDocuments = await SplitDocuments(docs);
+		const docPageContents = splitDocuments.map((item) => item.pageContent);
+		await IndexDocuments(file, docPageContents, chatThreadId);
+	}
+
+	const fileName = file.name;
+	return { fileName, errorMessage };
 };
 
 const LoadFile = async (formData: FormData) => {
@@ -149,11 +154,7 @@ const LoadFile = async (formData: FormData) => {
 		errorMessage = "Unknown error. Please contact ApplicationDevelopment@CreativeDC.com for assistance.";
 	}
 
-	if (errorMessage) {
-		throw new Error(errorMessage, { cause: errorMessage });
-	}
-
-	return { docs, file, chatThreadId };
+	return { docs, file, chatThreadId, errorMessage };
 };
 
 const SplitDocuments = async (docs: Array<Document>) => {

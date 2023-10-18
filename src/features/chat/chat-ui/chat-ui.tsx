@@ -101,15 +101,25 @@ export const ChatUI: FC<Prop> = (props) => {
 		try {
 			setIsUploadingFile(true);
 			formData.append("id", id);
-			const fileName = await UploadDocument(formData);
-			toast({
-				title: "File upload",
-				description: `${fileName} uploaded successfully.`,
-			});
+			const { fileName, errorMessage } = await UploadDocument(formData);
+
+			if (!errorMessage) {
+				toast({
+					title: "File upload",
+					description: `${fileName} uploaded successfully.`,
+				});
+			} else {
+				toast({
+					variant: "destructive",
+					description: "Error: " + errorMessage,
+					duration: 15000
+				});
+			}
 		} catch (error) {
 			toast({
 				variant: "destructive",
 				description: "" + ((error as Error).cause ?? error),
+				duration: 15000
 			});
 		} finally {
 			setIsUploadingFile(false);
