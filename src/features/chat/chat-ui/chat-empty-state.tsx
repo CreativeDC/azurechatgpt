@@ -59,7 +59,7 @@ export const EmptyState: FC<Prop> = (props) => {
             personalize the chat by making changes to the settings shown below.
           </p>
           <p className="">
-            {AI_NAME} users are requried to read and accept Creative's AI Guidance. <a className="text-link hover:text-link-hover" href="https://creativedc.sharepoint.com/:w:/r/sites/OPO/_layouts/15/Doc.aspx?sourcedoc=%7B8DDE5637-5740-4A65-B55C-2D7E47CC438F%7D&file=Updated%20Draft%20Guidance_Generative%20AI%20Use%20at%20Creative.docx&action=default&mobileredirect=true" target="_blank">Click here</a> to access the guidance.
+            {AI_NAME} users are requried to read and accept Creative's AI Guidance. <a className="text-link hover:text-link-hover" href="https://creativedc.sharepoint.com/sites/OPO/Public%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FOPO%2FPublic%20Documents%2FTools%20and%20Guidance%2FAI%20Guidance%2FAIGuidance%5FCreative%2Epdf&viewid=232f46a3%2Dd6af%2D4a6f%2D9cca%2D7f10893df869&parent=%2Fsites%2FOPO%2FPublic%20Documents%2FTools%20and%20Guidance%2FAI%20Guidance" target="_blank">Click here</a> to access the guidance.
           </p>
         </div>
       
