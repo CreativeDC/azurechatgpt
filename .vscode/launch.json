@@ -10,7 +10,7 @@
       },
       {
         "name": "Next.js: debug client-side",
-        "type": "chrome",
+        "type": "msedge",
         "request": "launch",
         "cwd": "${workspaceFolder}/src",
         "url": "http://localhost:3000"

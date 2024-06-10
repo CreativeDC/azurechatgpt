@@ -19,12 +19,13 @@ export interface ChatMessageModel {
 export type ConversationStyle = "creative" | "balanced" | "precise";
 export type ChatType = "simple" | "data" | "mssql";
 
-export const GPT_3_5 = "gpt-3.5-turbo-16k" as const;
-export const GPT_4 = "gpt-4-32k" as const;
+export const GPT_3_5 = "gpt-35-turbo" as const;
+export const GPT_4 = "gpt-4o" as const;
+export const GPT_4_32K = "gpt-4-32k" as const;
 
 export const NEW_CHAT_DEFAULT_NAME = "New Chat" as const;
 
-export type LLMModel = typeof GPT_3_5 | typeof GPT_4;
+export type LLMModel = typeof GPT_3_5 | typeof GPT_4 | typeof GPT_4_32K;
 
 export type ChatRole = "system" | "user" | "assistant" | "function";
 

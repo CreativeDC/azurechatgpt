@@ -38,6 +38,8 @@ export const ChatUI: FC<Prop> = (props) => {
 	const { data: session } = useSession();
 
 	const [isUploadingFile, setIsUploadingFile] = useState(false);
+	const [isFileNull, setIsFileNull] = useState(true);
+	const [showFileUpload, setShowFileUpload] = useState<ChatType>("simple");
 
 	const [chatBody, setBody] = useState<PromptGPTBody>({
 		id: id,
@@ -52,6 +54,7 @@ export const ChatUI: FC<Prop> = (props) => {
 		input,
 		handleInputChange,
 		handleSubmit,
+		stop,
 		reload,
 		isLoading,
 	} = useChat({
@@ -87,6 +90,7 @@ export const ChatUI: FC<Prop> = (props) => {
 
 	const onChatTypeChange = (value: ChatType) => {
 		setBody((e) => ({ ...e, chatType: value }));
+		setShowFileUpload(value);
 	};
 
 	const onConversationStyleChange = (value: ConversationStyle) => {
@@ -94,7 +98,16 @@ export const ChatUI: FC<Prop> = (props) => {
 	};
 
 	const onHandleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		if (isLoading) {
+			e.preventDefault();
+			return;
+		}
+
 		handleSubmit(e);
+	};
+
+	const onHandleCancelSubmit = (e: any) => {
+		stop();
 	};
 
 	const onFileChange = async (formData: FormData) => {
@@ -108,12 +121,14 @@ export const ChatUI: FC<Prop> = (props) => {
 					title: "File upload",
 					description: `${fileName} uploaded successfully.`,
 				});
+				setIsFileNull(false);
 			} else {
 				toast({
 					variant: "destructive",
 					description: "Error: " + errorMessage,
 					duration: 15000
 				});
+				setIsFileNull(true);
 			}
 		} catch (error) {
 			toast({
@@ -121,6 +136,7 @@ export const ChatUI: FC<Prop> = (props) => {
 				description: "" + ((error as Error).cause ?? error),
 				duration: 15000
 			});
+			setIsFileNull(true);
 		} finally {
 			setIsUploadingFile(false);
 		}
@@ -177,8 +193,10 @@ export const ChatUI: FC<Prop> = (props) => {
 			<ChatInput
 				isLoading={isLoading}
 				value={input}
+				disableSubmit={isFileNull && showFileUpload === "data"}
 				handleInputChange={handleInputChange}
 				handleSubmit={onHandleSubmit}
+				handleCancelSubmit={onHandleCancelSubmit}
 			/>
 		</Card>
 	);

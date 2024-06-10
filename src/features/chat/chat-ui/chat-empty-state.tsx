@@ -55,7 +55,7 @@ export const EmptyState: FC<Prop> = (props) => {
             Welcome!
           </Typography>
           <p className="">
-            Welcome to {AI_NAME} - the friendly chatbot from Creative IT! Start by  typing your message in the box below. You can also
+            Welcome to {AI_NAME} - the friendly chatbot from Creative IT! Start by typing your message in the box below. You can also
             personalize the chat by making changes to the settings shown below.
           </p>
           <p className="">

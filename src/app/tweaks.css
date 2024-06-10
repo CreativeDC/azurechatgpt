@@ -1,3 +1,7 @@
 .fix-scroll-bar {
 	width: calc(100% - 17px) !important;
 }
+
+.right-14 {
+	right: 3.5rem;
+}

@@ -16,6 +16,7 @@ import {
 	PromptGPTProps,
 	GPT_3_5,
 	GPT_4,
+	GPT_4_32K,
 	NEW_CHAT_DEFAULT_NAME
 } from "./models";
 
@@ -167,7 +168,7 @@ export const CreateChatThread = async () => {
 		createdAt: new Date(),
 		isDeleted: false,
 		chatType: "simple",
-		model: GPT_3_5,
+		model: GPT_4,
 		conversationStyle: "balanced",
 		type: CHAT_THREAD_ATTRIBUTE,
 	};
