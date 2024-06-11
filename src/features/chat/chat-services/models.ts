@@ -27,7 +27,7 @@ export const NEW_CHAT_DEFAULT_NAME = "New Chat" as const;
 
 export type LLMModel = typeof GPT_3_5 | typeof GPT_4 | typeof GPT_4_32K;
 
-export type ChatRole = "system" | "user" | "assistant" | "function";
+export type ChatRole = "system" | "user" | "assistant" | "function" | "data" | "tool";
 
 export interface ChatThreadModel {
   id: string;
