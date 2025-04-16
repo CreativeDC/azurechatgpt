@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FC } from "react";
-import { LLMModel, GPT_3_5, GPT_4, GPT_4_32K } from "../chat-services/models";
+import { LLMModel, GPT_3_5, GPT_4, GPT_4_32K, GPT_4_1 } from "../chat-services/models";
 
 interface Prop {
 	disable: boolean;
@@ -20,8 +20,8 @@ export const ChatModelSelector: FC<Prop> = (props) => {
 		>
 			<TabsList className="grid w-full grid-cols-1 h-12 items-stretch">
 
-				<TabsTrigger value={GPT_4} disabled={props.disable}>
-					GPT-4 💎
+				<TabsTrigger value={GPT_4_1} disabled={props.disable}>
+					GPT-4.1 💎
 				</TabsTrigger>
 			</TabsList>
 		</Tabs>

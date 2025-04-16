@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FC } from "react";
 import { AI_NAME } from "../theme/customise";
 import { FindAllChatsInThread, FindChatThreadByID } from "./reporting-service";
-import { GPT_3_5, GPT_4, GPT_4_32K } from "../chat/chat-services/models";
+import { GPT_3_5, GPT_4, GPT_4_32K, GPT_4_1 } from "../chat/chat-services/models";
 
 interface Props {
 	chatId: string;
@@ -22,8 +22,8 @@ export const ChatReportingUI: FC<Props> = async (props) => {
 					<Tabs defaultValue={chatThread.model}>
 						<TabsList className="grid w-full grid-cols-1 h-12 items-stretch">
 
-							<TabsTrigger disabled={true} value={GPT_4}>
-								GPT-4 💎
+							<TabsTrigger disabled={true} value={GPT_4_1}>
+								GPT-4.1 💎
 							</TabsTrigger>
 						</TabsList>
 					</Tabs>

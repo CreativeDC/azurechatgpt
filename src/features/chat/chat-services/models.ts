@@ -22,10 +22,11 @@ export type ChatType = "simple" | "data" | "mssql";
 export const GPT_3_5 = "gpt-35-turbo" as const;
 export const GPT_4 = "gpt-4o" as const;
 export const GPT_4_32K = "gpt-4-32k" as const;
+export const GPT_4_1 = "gpt-4.1" as const;
 
 export const NEW_CHAT_DEFAULT_NAME = "New Chat" as const;
 
-export type LLMModel = typeof GPT_3_5 | typeof GPT_4 | typeof GPT_4_32K;
+export type LLMModel = typeof GPT_3_5 | typeof GPT_4 | typeof GPT_4_32K | typeof GPT_4_1;
 
 export type ChatRole = "system" | "user" | "assistant" | "function" | "data" | "tool";
 
