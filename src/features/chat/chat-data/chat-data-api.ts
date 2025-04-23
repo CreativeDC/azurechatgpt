@@ -24,7 +24,7 @@ export const ChatData = async (props: PromptGPTProps) => {
 
 	const chatModel = new ChatOpenAI({
 	modelName: chatThread.model,
-	azureOpenAIApiDeploymentName: chatThread.model/*.replace(".", "")*/,
+	azureOpenAIApiDeploymentName: chatThread.model,
 		temperature: transformConversationStyleToTemperature(
 			chatThread.conversationStyle
 		),
@@ -61,7 +61,7 @@ export const ChatData = async (props: PromptGPTProps) => {
 				- Your model is GPT-4-32K.
 				` :
 			((chatThread.model as LLMModel) == GPT_4_1) ?
-				`- Your knowledge cutoff is May 31 2024..
+				`- Your knowledge cutoff is May 31 2024.
 				- Your model is GPT-4.1.
 				` :
 				``

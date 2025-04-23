@@ -26,7 +26,7 @@ export const ChatSimple = async (props: PromptGPTProps) => {
 
 	const chat = new ChatOpenAI({
 		modelName: chatThread.model,
-		azureOpenAIApiDeploymentName: chatThread.model/*.replace(".", "")*/,
+		azureOpenAIApiDeploymentName: chatThread.model,
 		temperature: transformConversationStyleToTemperature(
 			chatThread.conversationStyle
 		),
