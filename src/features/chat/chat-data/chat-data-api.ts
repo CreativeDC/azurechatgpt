@@ -13,7 +13,7 @@ import {
 import { AzureCogSearch } from "../../langchain/vector-stores/azure-cog-search/azure-cog-vector-store";
 import { insertPromptAndResponse } from "../chat-services/chat-service";
 import { initAndGuardChatSession } from "../chat-services/chat-thread-service";
-import { FaqDocumentIndex, GPT_3_5, GPT_4, GPT_4_32K, LLMModel, PromptGPTProps } from "../chat-services/models";
+import { FaqDocumentIndex, GPT_3_5, GPT_4, GPT_4_32K, GPT_4_1, LLMModel, PromptGPTProps } from "../chat-services/models";
 import { transformConversationStyleToTemperature } from "../chat-services/utils";
 import { AI_NAME } from "@/features/theme/customise";
 
@@ -24,7 +24,7 @@ export const ChatData = async (props: PromptGPTProps) => {
 
 	const chatModel = new ChatOpenAI({
 	modelName: chatThread.model,
-	azureOpenAIApiDeploymentName: chatThread.model.replace(".", ""),
+	azureOpenAIApiDeploymentName: chatThread.model,
 		temperature: transformConversationStyleToTemperature(
 			chatThread.conversationStyle
 		),
@@ -59,6 +59,10 @@ export const ChatData = async (props: PromptGPTProps) => {
 			((chatThread.model as LLMModel) == GPT_4_32K) ? 
 				`- Your knowledge cutoff is September 2021.
 				- Your model is GPT-4-32K.
+				` :
+			((chatThread.model as LLMModel) == GPT_4_1) ?
+				`- Your knowledge cutoff is May 31 2024.
+				- Your model is GPT-4.1.
 				` :
 				``
 		) +

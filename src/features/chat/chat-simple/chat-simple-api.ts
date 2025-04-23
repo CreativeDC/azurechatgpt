@@ -12,7 +12,7 @@ import {
 	SystemMessagePromptTemplate,
 } from "langchain/prompts";
 import { initAndGuardChatSession } from "../chat-services/chat-thread-service";
-import { LLMModel, GPT_3_5, GPT_4, GPT_4_32K, PromptGPTProps } from "../chat-services/models";
+import { LLMModel, GPT_3_5, GPT_4, GPT_4_32K, GPT_4_1, PromptGPTProps } from "../chat-services/models";
 import { transformConversationStyleToTemperature } from "../chat-services/utils";
 
 export const ChatSimple = async (props: PromptGPTProps) => {
@@ -26,7 +26,7 @@ export const ChatSimple = async (props: PromptGPTProps) => {
 
 	const chat = new ChatOpenAI({
 		modelName: chatThread.model,
-		azureOpenAIApiDeploymentName: chatThread.model.replace(".", ""),
+		azureOpenAIApiDeploymentName: chatThread.model,
 		temperature: transformConversationStyleToTemperature(
 			chatThread.conversationStyle
 		),
@@ -72,6 +72,10 @@ export const ChatSimple = async (props: PromptGPTProps) => {
 			((chatThread.model as LLMModel) == GPT_4_32K) ? 
 				`- Your knowledge cutoff is September 2021.
 				- Your model is GPT-4-32K.
+				` :
+			((chatThread.model as LLMModel) == GPT_4_1) ?
+				`- Your knowledge cutoff is May 31 2024.
+				- Your model is GPT-4.1.
 				` :
 				``
 		);

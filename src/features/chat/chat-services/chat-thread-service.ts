@@ -17,6 +17,7 @@ import {
 	GPT_3_5,
 	GPT_4,
 	GPT_4_32K,
+	GPT_4_1,
 	NEW_CHAT_DEFAULT_NAME
 } from "./models";
 
@@ -168,7 +169,7 @@ export const CreateChatThread = async () => {
 		createdAt: new Date(),
 		isDeleted: false,
 		chatType: "simple",
-		model: GPT_4,
+		model: GPT_4_1,
 		conversationStyle: "balanced",
 		type: CHAT_THREAD_ATTRIBUTE,
 	};
